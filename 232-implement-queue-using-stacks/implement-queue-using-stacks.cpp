@@ -7,9 +7,8 @@ public:
 
     void popFromBottom(stack<int> &st, int &x){
         if(st.size()==1){
-            int numm= st.top();
+            x =st.top();
             st.pop();
-            x = numm;
             return;
         }
 
