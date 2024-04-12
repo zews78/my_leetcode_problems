@@ -1,34 +1,38 @@
+#include <bits/stdc++.h>
+
 class Solution {
 public:
-    std::string removeKdigits(std::string num, int k) {
-        std::stack<char> stack;
-        
-        for (char digit : num) {
-            while (!stack.empty() && k > 0 && stack.top() > digit) {
-                stack.pop();
-                k--;
-            }
-            stack.push(digit);
-        }
-        
-        // Remove remaining k digits from the end of the stack
-        while (k > 0 && !stack.empty()) {
-            stack.pop();
-            k--;
-        }
-        
-        // Construct the resulting string from the stack
-        std::string result;
-        while (!stack.empty()) {
-            result += stack.top();
-            stack.pop();
-        }
-        std::reverse(result.begin(), result.end()); // Reverse to get the correct order
-        
-        // Remove leading zeros
-        size_t pos = result.find_first_not_of('0');
-        result = (pos == std::string::npos) ? "0" : result.substr(pos);
-        
-        return result;
+  string removeKdigits(string num, int k) {
+    if (num.size() == k) { // Handle all digits removal
+      return "0";
     }
+
+    stack<char> st;
+
+    for (char x : num) {
+      while(!st.empty() && st.top() > x && k > 0) {
+        st.pop();
+        k--;
+      }
+      st.push(x);
+    }
+
+    while (!st.empty() && k > 0) {
+      st.pop();
+      k--;
+    }
+
+    string str = "";
+    while (!st.empty()) {
+      str += st.top();
+      st.pop();
+    }
+
+    reverse(str.begin(), str.end());
+
+    // remove leading zeros
+    size_t pos = str.find_first_not_of('0');
+    str = (pos == std::string::npos) ? "0" : str.substr(pos);
+    return str;
+  }
 };
