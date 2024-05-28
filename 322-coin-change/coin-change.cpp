@@ -6,11 +6,11 @@ public:
 
         for(int i=0; i<=n; i++){
             for(int j=0; j<=amount; j++){
-                if(j==0){
-                    dp[i][j] = 0;
-                }
-                else if(i==0){
+                if(i==0){
                     dp[i][j] = 1e5;
+                }
+                else if(j==0){
+                    dp[i][j] = 0;
                 }
                 else if(coins[i-1]> j){
                     dp[i][j] = dp[i-1][j];
