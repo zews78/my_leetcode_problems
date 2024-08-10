@@ -69,7 +69,7 @@ public:
             return 0;
         }
         
-        if(memo.find(root)!= memo.end()) return memo[root];
+        if(memo[root]) return memo[root];
 
         //not include
         int not_include=0;
