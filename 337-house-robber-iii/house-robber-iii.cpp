@@ -65,26 +65,41 @@ public:
         // return max(odd_sum, even_sum);
 
         //dfs approach
-    if (!root) return 0;
-    if (memo.find(root) != memo.end()) return memo[root];
+        if(!root){
+            return 0;
+        }
+        
+        if(memo.find(root)!= memo.end()) return memo[root];
 
-    // If we include the current node's value
-    int include = root->val;
-    if (root->left) {
-        include += rob(root->left->left);
-        include += rob(root->left->right);
-    }
-    if (root->right) {
-        include += rob(root->right->left);
-        include += rob(root->right->right);
-    }
+        //not include
+        int not_include=0;
+        if(root->left){
+            not_include += rob(root->left);
+        }
+        if(root->right){
+            not_include += rob(root->right);
+        }
+        int include=root->val;
+        if(root->left){
+            if(root->left->left){
+                include+=rob(root->left->left);
+            }
+            if(root->left->right){
+                include+=rob(root->left->right);
+            }
+        }
 
-    // If we do not include the current node's value
-    int not_include = rob(root->left) + rob(root->right);
+        if(root->right){
+            if(root->right->left){
+                include+=rob(root->right->left);
+            }
+            if(root->right->right){
+                include+=rob(root->right->right);
+            }
+        }
 
-    // Store the result in memo and return the maximum of include or not_include
-    memo[root] = max(include, not_include);
-    return memo[root];
+        // cout<<include<<" "<<not_include<<endl;
+        return memo[root] = max(include, not_include);
 
     }
 };
