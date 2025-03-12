@@ -8,8 +8,8 @@ public:
         }
 
         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> minHeap;
-        for (auto& [num, freq] : map) {
-            minHeap.push({freq, num}); 
+        for(auto x: map){
+            minHeap.push({x.second, x.first});
             if(minHeap.size()> k){
                 minHeap.pop();
             }
