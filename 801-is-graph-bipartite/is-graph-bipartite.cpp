@@ -1,23 +1,15 @@
 class Solution {
 public:
-    bool bfs(int start, vector<int> &visited, vector<vector<int>>& graph){
-        queue<int> q;
+    bool dfs(int start, vector<int> &visited, vector<vector<int>>& graph){
 
-        q.push(start);
-        visited[start]=0;
-
-        while(!q.empty()){
-            int top = q.front();
-            q.pop();
-
-            for(auto it: graph[top]){
-                if(visited[it]==-1){
-                    q.push(it);
-                    visited[it]=!visited[top];
-                }
-                else if(visited[it]==visited[top]){
+        for(auto x: graph[start]){
+            if(visited[x]==-1){
+                visited[x]=!visited[start];
+                if(!dfs(x, visited, graph)){
                     return false;
                 }
+            }else if(visited[x]==visited[start]){
+                return false;
             }
         }
         return true;
@@ -26,7 +18,8 @@ public:
         vector<int> visited(graph.size(), -1);
         for(int i=0; i<graph.size(); i++){
             if(visited[i]==-1){
-                if(!bfs(i, visited, graph)){
+                visited[i]=0;
+                if(!dfs(i, visited, graph)){
                     return false;
                 }
             }
