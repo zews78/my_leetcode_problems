@@ -1,114 +1,97 @@
 class Solution {
 public:
-    const int MOD = 1e9 + 7;
+    static const int MOD = 1e9 + 7;
+
+    // Function to count the number of distinct prime factors
+    int getPrimeScore(int val) {
+        int count = 0;
+        for (int i = 2; i * i <= val; i++) {
+            if (val % i == 0) {
+                count++;
+                while (val % i == 0) {
+                    val /= i;
+                }
+            }
+        }
+        if (val > 1) count++;  // If remaining number is prime
+        return count;
+    }
 
     int maximumScore(vector<int>& nums, int k) {
         int n = nums.size();
-        vector<int> primeScores(n);
+        vector<int> s(n, 0);
 
-        // Calculate the prime score for each number in nums
-        for (int index = 0; index < n; index++) {
-            int num = nums[index];
+        // Compute prime scores for each element
+        for (int i = 0; i < n; i++) {
+            s[i] = getPrimeScore(nums[i]);
+        }
 
-            // Check for prime factors from 2 to sqrt(n)
-            for (int factor = 2; factor <= sqrt(num); factor++) {
-                if (num % factor == 0) {
-                    // Increment prime score for each prime factor
-                    primeScores[index]++;
+        // Arrays to store previous and next dominant elements
+        vector<int> nextDomEle(n, n), prevDomEle(n, -1);
+        stack<int> st;
 
-                    // Remove all occurrences of the prime factor from num
-                    while (num % factor == 0) num /= factor;
-                }
+        // Compute previous dominant element
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && s[st.top()] < s[i]) {
+                st.pop();
             }
-
-            // If num is still greater than or equal to 2, it's a prime factor
-            if (num >= 2) primeScores[index]++;
-        }
-
-        // Initialize next and previous dominant index arrays
-        vector<int> nextDominant(n, n);
-        vector<int> prevDominant(n, -1);
-
-        // Stack to store indices for monotonic decreasing prime score
-        stack<int> decreasingPrimeScoreStack;
-
-        // Calculate the next and previous dominant indices for each number
-        for (int index = 0; index < n; index++) {
-            // While the stack is not empty and the current prime score is
-            // greater than the stack's top
-            while (!decreasingPrimeScoreStack.empty() &&
-                   primeScores[decreasingPrimeScoreStack.top()] <
-                       primeScores[index]) {
-                int topIndex = decreasingPrimeScoreStack.top();
-                decreasingPrimeScoreStack.pop();
-
-                // Set the next dominant element for the popped index
-                nextDominant[topIndex] = index;
+            if (!st.empty()) {
+                prevDomEle[i] = st.top();
             }
-
-            // If the stack is not empty, set the previous dominant element for
-            // the current index
-            if (!decreasingPrimeScoreStack.empty())
-                prevDominant[index] = decreasingPrimeScoreStack.top();
-
-            // Push the current index onto the stack
-            decreasingPrimeScoreStack.push(index);
+            st.push(i);
         }
 
-        // Calculate the number of subarrays in which each element is dominant
-        vector<long long> numOfSubarrays(n);
-        for (int index = 0; index < n; index++) {
-            numOfSubarrays[index] = (long long)(nextDominant[index] - index) *
-                                    (index - prevDominant[index]);
+        // Clear the stack for the next loop
+        while (!st.empty()) st.pop();
+
+        // Compute next dominant element
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && s[st.top()] <= s[i]) {
+                st.pop();
+            }
+            if (!st.empty()) {
+                nextDomEle[i] = st.top();
+            }
+            st.push(i);
         }
 
-        // Priority queue to process elements in decreasing order of their value
-        priority_queue<pair<int, int>> processingQueue;
+        // Compute the number of operations each element contributes
+        vector<long long> operations(n);
+        for (int i = 0; i < n; i++) {
+            operations[i] = (long long)(i - prevDomEle[i]) * (nextDomEle[i] - i);
+        }
 
-        // Push each number and its index onto the priority queue
-        for (int index = 0; index < n; index++)
-            processingQueue.push({nums[index], index});
+        // Max-heap to process elements in descending order
+        priority_queue<pair<int, int>> pq;
+        for (int i = 0; i < n; i++) {
+            pq.push({nums[i], i});
+        }
 
-        long long score = 1;
+        long long ans = 1;
 
-        // Process elements while there are operations left
+        // Process elements until k becomes zero
         while (k > 0) {
-            // Get the element with the maximum value from the queue
-            auto [num, index] = processingQueue.top();
-            processingQueue.pop();
-
-            // Calculate the number of operations to apply on the current
-            // element
-            long long operations = min((long long)k, numOfSubarrays[index]);
-
-            // Update the score by raising the element to the power of
-            // operations
-            score = (score * power(num, operations)) % MOD;
-
-            // Reduce the remaining operations count
-            k -= operations;
+            auto [val, index] = pq.top();
+            pq.pop();
+            long long operation = min(operations[index], (long long)k);
+            ans = (ans * power(val, operation)) % MOD;
+            k -= operation;
         }
 
-        return score;
+        return ans;
     }
 
 private:
-    // Helper function to compute the power of a number modulo MOD
+    // Fast modular exponentiation
     long long power(long long base, long long exponent) {
         long long res = 1;
-
-        // Calculate the exponentiation using binary exponentiation
         while (exponent > 0) {
-            // If the exponent is odd, multiply the result by the base
             if (exponent % 2 == 1) {
-                res = ((res * base) % MOD);
+                res = (res * base) % MOD;
             }
-
-            // Square the base and halve the exponent
             base = (base * base) % MOD;
             exponent /= 2;
         }
-
         return res;
     }
 };
