@@ -1,8 +1,7 @@
+
 class Solution {
 public:
-    static const int MOD = 1e9 + 7;
-
-    // Function to count the number of distinct prime factors
+    static const int MOD = 1e9 +7;
     int getPrimeScore(int val) {
         int count = 0;
         for (int i = 2; i * i <= val; i++) {
@@ -16,60 +15,61 @@ public:
         if (val > 1) count++;  // If remaining number is prime
         return count;
     }
-
     int maximumScore(vector<int>& nums, int k) {
         int n = nums.size();
         vector<int> s(n, 0);
-
-        // Compute prime scores for each element
-        for (int i = 0; i < n; i++) {
+        for(int i=0; i<n; i++){
             s[i] = getPrimeScore(nums[i]);
         }
+        vector<int> nextDomEle(n, n);
+        vector<int> prevDomEle(n, -1);
 
-        // Arrays to store previous and next dominant elements
-        vector<int> nextDomEle(n, n), prevDomEle(n, -1);
-        stack<int> st;
+        stack<int> st_prev;
+        stack<int> st_next;
+        for(int i=0; i<n; i++){
+            while(!st_prev.empty() && s[st_prev.top()] < s[i]){
+                st_prev.pop();
+            }
+            if(!st_prev.empty()){
+                prevDomEle[i]= st_prev.top();
+            }
 
-        // Compute previous dominant element
-        for (int i = 0; i < n; i++) {
-            while (!st.empty() && s[st.top()] < s[i]) {
-                st.pop();
+            st_prev.push(i);
+
+            // ---------------------
+
+            while(!st_next.empty() && s[st_next.top()] <= s[n-i-1]){
+                st_next.pop();
             }
-            if (!st.empty()) {
-                prevDomEle[i] = st.top();
+            if(!st_next.empty()){
+                nextDomEle[n-i-1]= st_next.top();
             }
-            st.push(i);
+
+            st_next.push(n-i-1);
+
         }
-
-        // Clear the stack for the next loop
-        while (!st.empty()) st.pop();
-
-        // Compute next dominant element
-        for (int i = n - 1; i >= 0; i--) {
-            while (!st.empty() && s[st.top()] <= s[i]) {
-                st.pop();
-            }
-            if (!st.empty()) {
-                nextDomEle[i] = st.top();
-            }
-            st.push(i);
-        }
-
-        // Compute the number of operations each element contributes
+        // for(auto x: s){
+        //     cout<<x<<" ";
+        // }cout<<endl;
+        // for(int i=0; i<n; i++){
+        //     cout<<prevDomEle[i]<<" ";
+        // }cout<<endl;
+        // for(int i=0; i<n; i++){
+        //     cout<<nextDomEle[i]<<" ";
+        // }
         vector<long long> operations(n);
-        for (int i = 0; i < n; i++) {
-            operations[i] = (long long)(i - prevDomEle[i]) * (nextDomEle[i] - i);
+        for(int i=0; i<n; i++){
+            operations[i] = (long long)(i-prevDomEle[i])*(nextDomEle[i]-i);
         }
 
-        // Max-heap to process elements in descending order
         priority_queue<pair<int, int>> pq;
-        for (int i = 0; i < n; i++) {
+
+        for(int i=0; i<n; i++){
             pq.push({nums[i], i});
         }
 
-        long long ans = 1;
+        long long ans =1;
 
-        // Process elements until k becomes zero
         while (k > 0) {
             auto [val, index] = pq.top();
             pq.pop();
@@ -77,21 +77,26 @@ public:
             ans = (ans * power(val, operation)) % MOD;
             k -= operation;
         }
-
         return ans;
     }
 
 private:
-    // Fast modular exponentiation
+    // Helper function to compute the power of a number modulo MOD
     long long power(long long base, long long exponent) {
         long long res = 1;
+
+        // Calculate the exponentiation using binary exponentiation
         while (exponent > 0) {
+            // If the exponent is odd, multiply the result by the base
             if (exponent % 2 == 1) {
-                res = (res * base) % MOD;
+                res = ((res * base) % MOD);
             }
+
+            // Square the base and halve the exponent
             base = (base * base) % MOD;
             exponent /= 2;
         }
+
         return res;
     }
 };
