@@ -2,22 +2,28 @@ class Solution {
 public:
     int subsetXORSum(vector<int>& nums) {
         int n = nums.size();
-        int len = 1<<n;
-        int res_sum =0;
-        for(int i=0; i<len; i++){
-            int val = i;
-            int arr_xorr=0;
-            int count =0;
+        int bitSize = (1<<n) - 1;
+        int output=0;
+        while(bitSize>=0){
+            int val = bitSize;
+            cout<<bitSize;
+            vector<int> subset;
+
+            int count=0;
             while(val){
                 if(val & 1){
-                    arr_xorr ^= nums[count];
+                    subset.push_back(nums[count]);
                 }
                 count++;
-                val = val>>1;
+                val = val>> 1;
             }
-            res_sum+=arr_xorr;
-
+            int xorr=0;
+            for(auto x: subset){
+                xorr ^= x;
+            }
+            output+=xorr;
+            bitSize--;
         }
-        return res_sum;
+        return output;
     }
 };
