@@ -1,29 +1,18 @@
 class Solution {
 public:
+    int solve(int n, vector<int>& nums, int xorr){
+        if(n==0){
+            return xorr;
+        }
+
+        int include = solve(n-1, nums, xorr^nums[n-1]);
+        int not_include = solve(n-1, nums, xorr);
+        return include + not_include;
+    }
     int subsetXORSum(vector<int>& nums) {
         int n = nums.size();
-        int bitSize = (1<<n) - 1;
-        int output=0;
-        while(bitSize>=0){
-            int val = bitSize;
-            cout<<bitSize;
-            vector<int> subset;
-
-            int count=0;
-            while(val){
-                if(val & 1){
-                    subset.push_back(nums[count]);
-                }
-                count++;
-                val = val>> 1;
-            }
-            int xorr=0;
-            for(auto x: subset){
-                xorr ^= x;
-            }
-            output+=xorr;
-            bitSize--;
-        }
-        return output;
+        int xorr =0;
+        return solve(n, nums, xorr);
+;
     }
 };
