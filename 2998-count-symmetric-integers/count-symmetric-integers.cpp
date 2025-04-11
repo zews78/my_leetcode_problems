@@ -26,9 +26,9 @@ public:
                     ans++;
                 }
             }
-            // else{
-            //     i = pow(10,curr_str.size());
-            // }
+            else{
+                i = pow(10,curr_str.size());
+            }
         }
         return ans;
     }
