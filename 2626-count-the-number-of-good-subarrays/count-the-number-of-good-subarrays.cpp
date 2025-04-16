@@ -22,12 +22,13 @@ public:
 
             while(count_pairs>=k){
                 count+=(n-j-1);
-                count_pairs -= (freqMap[nums[i]] * (freqMap[nums[i]]-1))/2;
+                // count_pairs -= (freqMap[nums[i]] * (freqMap[nums[i]]-1))/2;
                 freqMap[nums[i]]--;
                 if(freqMap[nums[i]]==0){
                     freqMap.erase(nums[i]);
                 }
-                count_pairs += (freqMap[nums[i]] * (freqMap[nums[i]]-1))/2;
+                // count_pairs += (freqMap[nums[i]] * (freqMap[nums[i]]-1))/2;
+                count_pairs -= freqMap[nums[i]];
 
                 count++;
                 i++;
