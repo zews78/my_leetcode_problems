@@ -1,22 +1,21 @@
 class Solution {
 public:
-    bool solve(int i, vector<int>& nums, vector<int> &dp){
-        if(i>=nums.size()-1){
-            return true;
-        }
-        if(dp[i]!=-1) return dp[i];
-
-        for(int k=i+1; k<=i+nums[i]; k++){
-            if(solve(k, nums, dp)){
-                return dp[i] = true;
-            }
-            // return solve(k, nums);
-        }
-        return dp[i]= false;
-    }
     bool canJump(vector<int>& nums) {
         int n= nums.size();
-        vector<int> dp(n+1, -1);
-        return solve(0, nums, dp);
+        // if(n<=1){
+        //     return true;
+        // }
+        // if(nums[0]==0){
+        //     return false;
+        // }
+        int max_reach_ind = 0;
+        for(int i=0; i<n-1; i++){
+            max_reach_ind = max(max_reach_ind, i+nums[i]);
+            if(nums[i]==0 && max_reach_ind<=i){
+                return false;
+            }
+        }
+        if(max_reach_ind>=n-1) return true;
+        return false;
     }
 };
