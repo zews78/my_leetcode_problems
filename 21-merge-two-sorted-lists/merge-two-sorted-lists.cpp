@@ -29,22 +29,22 @@ public:
 
         while(list1 && list2){
             if(list1->val <=list2->val){
-                merged_head->next = list1;
+                merged->next = list1;
                 list1 = list1->next;
             }
             else{
-                merged_head->next = list2;
+                merged->next = list2;
                 list2 = list2->next;
             }
-            merged_head = merged_head->next;
+            merged = merged->next;
         }
 
         if(!list1){
-            merged_head->next = list2;
+            merged->next = list2;
         }else{
-            merged_head->next = list1;
+            merged->next = list1;
         }
-        return merged;
+        return merged_head;
 
     }
 };
