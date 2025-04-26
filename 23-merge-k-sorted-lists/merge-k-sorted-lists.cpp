@@ -11,31 +11,41 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        vector<int> sorted_arr;
+        priority_queue<pair<int, ListNode*>,vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> pq;
+
+        int n = lists.size();
+        if(n ==0) return nullptr;
+
         for(int i=0; i<lists.size(); i++){
             ListNode* currHead = lists[i];
-            while(currHead){
-                sorted_arr.push_back(currHead->val);
-                currHead = currHead->next;
+            if(currHead){
+                pq.push({currHead->val, currHead});
             }
         }
-        sort(sorted_arr.begin(), sorted_arr.end());
-        // for(auto x: sorted_arr){
-        //     cout<<x<<" ";
-        // }
-        int n = sorted_arr.size();
-        if(n==0) return nullptr;
-        
-        int first_ele = sorted_arr[0];
-        ListNode* newHead = new ListNode(first_ele);
-        ListNode* copy_newHead = newHead;
+        // cout<<pq.size();
 
-        for(int i=1; i<sorted_arr.size(); i++){
-            ListNode* next_node = new ListNode(sorted_arr[i]);
-            newHead->next = next_node;
-            newHead = next_node;
+        if(pq.size()==0) return nullptr;
+
+        ListNode* first_head = pq.top().second;
+        pq.pop();
+        if(first_head->next){
+            pq.push({first_head->next->val, first_head->next});
         }
-        return copy_newHead;
-        return NULL;
+        ListNode* first_head_copy = first_head;
+
+        while(!pq.empty()){
+            ListNode* front = pq.top().second;
+            pq.pop();
+
+            ListNode* front_next = front->next;
+            if(front_next){
+                pq.push({front_next->val, front_next});
+            }
+            first_head->next = front;
+            first_head = front;
+        }
+        return first_head_copy;
+
+        // return nullptr;
     }
 };
