@@ -17,34 +17,14 @@ public:
         if(list2==NULL){
             return list1;
         }
-        ListNode* merged = list1;
-        if(list1->val <=list2->val){
-            merged = list1;
-            list1 = list1->next;
+        
+        if(list1->val <= list2->val){
+            list1->next = mergeTwoLists(list1->next, list2);
+            return list1;
         }else{
-            merged = list2;
-            list2 = list2->next;
+            list2->next = mergeTwoLists(list1, list2->next);
+            return list2;
         }
-        ListNode* merged_head = merged;
-
-        while(list1 && list2){
-            if(list1->val <=list2->val){
-                merged->next = list1;
-                list1 = list1->next;
-            }
-            else{
-                merged->next = list2;
-                list2 = list2->next;
-            }
-            merged = merged->next;
-        }
-
-        if(!list1){
-            merged->next = list2;
-        }else{
-            merged->next = list1;
-        }
-        return merged_head;
 
     }
 };
