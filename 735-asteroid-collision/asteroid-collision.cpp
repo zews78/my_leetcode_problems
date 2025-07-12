@@ -6,17 +6,17 @@ public:
             if(x>0){
                 st.push(x);
             }else{
-                while(!st.empty() && st.top()>0 && st.top()<=abs(x)){
-                    int top = st.top();
+                while(!st.empty() && st.top()>0 && st.top()<abs(x)){
                     st.pop();
-                    if(top==abs(x)){
-                        goto skip;
-                    }
                 }
-                if(st.empty() || st.top()<0){
-                    st.push(x);
+                if(!st.empty() && st.top()>0 && st.top()==abs(x)){
+                    st.pop();
+                    continue;
                 }
-                skip:
+                if(!st.empty() && st.top()>0 && st.top()>abs(x)){
+                    continue;
+                }
+                st.push(x);
             }
 
         }
