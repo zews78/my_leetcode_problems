@@ -1,26 +1,26 @@
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        int n = intervals.size();
-        vector<vector<int>> output;
         sort(intervals.begin(), intervals.end());
-
-        int left = intervals[0][0];
-        int right = intervals[0][1];
+        int st_ele = intervals[0][0];
+        int end_ele = intervals[0][1];
+        int n = intervals.size();
+    
+        vector<vector<int>> output;
 
         for(int i=1; i<n; i++){
-            int curr_left= intervals[i][0];
-            int curr_right= intervals[i][1];
-            if(curr_left<=right){
-                right = max(curr_right, right);
+            int curr_x = intervals[i][0];
+            int curr_y = intervals[i][1];
+
+            if(curr_x<= end_ele){
+                end_ele = max(curr_y, end_ele);
             }else{
-                output.push_back({left, right});
-                left = curr_left;
-                right = curr_right;
+                output.push_back({st_ele, end_ele});
+                st_ele = curr_x;
+                end_ele = curr_y;
             }
         }
-        output.push_back({left, right});
-
+        output.push_back({st_ele, end_ele});
         return output;
     }
 };
