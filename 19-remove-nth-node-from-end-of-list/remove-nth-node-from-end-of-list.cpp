@@ -11,40 +11,48 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        int len=0;
-        ListNode* dummy_head = head;
-        while(dummy_head){
+        if(head==nullptr || head->next==nullptr){
+            return nullptr;
+        }
+        ListNode* dummy = head;
+        int len =0;
+        while(dummy){
             len++;
-            dummy_head = dummy_head->next;
+            dummy = dummy->next;
         }
 
-        ListNode* prev = nullptr;
-        ListNode* temp_head = head;
-        
-        int index = len-n;
-        int curr_index =0;
+        int nth = len-n+1;
 
-        if(index == 0){
-            ListNode* newHead = new ListNode();
-            newHead->next = temp_head->next;
-            return newHead->next;
+        if(nth==1){
+            //fist node
+            return head->next;
         }
-        // else if(index == len-1){
-            
-        // }
-
-        while(temp_head){
-            if(curr_index == index){
-                if(index == len-1){
-                    prev->next = nullptr;
-                }else{
-                    prev->next = temp_head->next;
+        else if(nth==len){
+            //last node
+            ListNode* dummy = head;
+            while(head){
+                if(head->next->next==nullptr){
+                    head->next = nullptr;
+                    break;
                 }
+                head = head->next;
             }
-            prev = temp_head;
-            temp_head = temp_head ->next;
-            curr_index++;
+            return dummy;
+        }else{
+            ListNode* dummy = head;
+            int counter =1;
+            while(head){
+                if(counter == nth-1){
+                    head->next = head->next->next;
+                    break;
+                }
+                head = head->next;
+                counter++;
+            }
+            return dummy;
+
         }
-        return head;
+
+        return nullptr;
     }
 };
