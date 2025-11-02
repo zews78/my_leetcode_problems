@@ -11,65 +11,49 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-
-        int carry = 0;
-
-        int temp = 0;
-        temp = (l1->val + l2->val + carry);
-        carry = temp/10;
-
-            
-
-        ListNode* res = new ListNode(temp%10);
-        ListNode* head = res;
-        ListNode* h1 =l1->next;
-        ListNode* h2 =l2->next;
-
-        while(h1!=nullptr && h2!=nullptr){
-            int temp = 0;
-            temp = (h1->val + h2->val + carry);
-            carry = temp/10;
-            
-
-            ListNode* temp_node = new ListNode(temp%10);
-            head->next = temp_node;
+        // int sum =0;
+        int carry =0;
+        ListNode* head = new ListNode(-1);
+        ListNode* dummy = head;
+        while(l1 && l2){
+            int sum = l1->val + l2->val;
+            sum+= carry;
+            carry = sum/10;
+            sum = sum%10;
+            ListNode* temp = new ListNode(sum);
+            head->next = temp;
             head = head->next;
 
-            h1 = h1->next;
-            h2 = h2->next;
-            
+            l1 = l1->next;
+            l2 = l2->next;
         }
-        while(h1!=nullptr){
-            int temp = 0;
-            temp = (h1->val + carry);
-            carry = temp/10;
-            
-
-            ListNode* temp_node = new ListNode(temp%10);
-            head->next = temp_node;
+        while(l1){
+            int sum = l1->val;
+            sum+= carry;
+            carry = sum/10;
+            sum = sum%10;
+            ListNode* temp = new ListNode(sum);
+            head->next = temp;
             head = head->next;
 
-            h1 = h1->next;
+            l1 = l1->next;
         }
-        while(h2!=nullptr){
-            int temp = 0;
-            temp = (h2->val + carry);
-            carry = temp/10;
-            
-
-            ListNode* temp_node = new ListNode(temp%10);
-            head->next = temp_node;
+        while(l2){
+            int sum = l2->val;
+            sum+= carry;
+            carry = sum/10;
+            sum = sum%10;
+            ListNode* temp = new ListNode(sum);
+            head->next = temp;
             head = head->next;
 
-            h2 = h2->next;
+            l2 = l2->next;
         }
         if(carry){
-            ListNode* temp_node = new ListNode(carry);
-            head->next = temp_node;
+            ListNode* temp = new ListNode(carry);
+            head->next = temp;
             head = head->next;
-
         }
-
-        return res;
+        return dummy->next;
     }
 };
