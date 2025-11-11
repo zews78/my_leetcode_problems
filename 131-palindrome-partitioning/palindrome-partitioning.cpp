@@ -1,65 +1,43 @@
 class Solution {
 public:
-    bool checkPalindrome(string &s, int i, int ind){
-        int start=i, end=ind;
-        while(start<=end){
-            if(s[start++]!=s[end--]){
+    bool isPallindrome(string s){
+        int i=0;
+        int e=s.size()-1;
+        bool isPall = true;
+        while(i<e){
+            if(s[i]!=s[e]){
                 return false;
             }
+            i++;e--;
         }
-        return true;
+        return isPall;
     }
-    
-    // void solve(int i, int N, string &s, vector<string> &arr, vector<vector<string>> &res){
-    //     if(i==N){
-    //         res.push_back(arr);
-    //         return;
-    //     }
-        
-    //     for(int ind=i; ind<N; ++ind){
-    //         if(checkPalindrome(s,i,ind)){
-    //             arr.push_back(s.substr(i, ind-i+1));
-    //             solve(ind+1, N, s, arr, res);
-    //             arr.pop_back();
-                
-    //         }
-    //     }
-    // }
+    vector<vector<string>> partition(string s) {
+        int curr= 0;
+        int prev = -1;
+        int n= s.size();
 
+        vector<string> pallindrome_set;
+        vector<vector<string>> all_pallindromes;
+        solve(curr, prev, n, s, pallindrome_set, all_pallindromes);
+        return all_pallindromes;
+    }
 
-
-
-
-
-
-
-
-
-
-
-    void solve(int i, int N, string &s, vector<string> &arr, vector<vector<string>> &res){
-        if(i==N){
-            res.push_back(arr);
+    void solve(int curr, int prev, int n, string s, vector<string> pallindrome_set, vector<vector<string>> &all_pallindromes){
+        if(curr==n){
+            all_pallindromes.push_back(pallindrome_set);
             return;
         }
 
-        for(int ind=i; ind<N; ind++){
-            if(checkPalindrome(s,i,ind)){
-                arr.push_back(s.substr(i, ind-i+1));
-                solve(ind+1, N, s, arr, res);
-                arr.pop_back();
+        for(int i=curr; i<n; i++){
+            int st = curr;
+            int end = i;
+            string temp_set = s.substr(st, end-st+1);
+            if(isPallindrome(temp_set)){
+                pallindrome_set.push_back(temp_set);
+                solve(i+1, prev, n, s, pallindrome_set, all_pallindromes);
+                pallindrome_set.pop_back();
             }
         }
-    }
-
-
-
-    
-    vector<vector<string>> partition(string s) {
-        vector<vector<string>> res;
-        vector<string> arr;
-        int N = s.size();
-        solve(0,N,s, arr, res);
-        return res;
     }
 };
