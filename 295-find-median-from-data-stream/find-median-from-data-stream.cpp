@@ -1,64 +1,49 @@
-class dataArr {
-    public:
-    priority_queue<int> max_heap_smaller;
-    priority_queue<int, vector<int>, greater<int>> min_heap_larger;
+class HeapData{
+public:
+    priority_queue<int> low;
+    priority_queue<int, vector<int>, greater<int>> high;
 };
+
 
 class MedianFinder {
 private:
-dataArr ds;
+    HeapData hd;
 public:
     MedianFinder() {
-        // ds = new dataArr();
+        
     }
     
     void addNum(int num) {
-        ds.max_heap_smaller.push(num);
-        int s = ds.max_heap_smaller.size();
-        int l = ds.min_heap_larger.size();
-
-        if(s>0 && l>0 && ds.max_heap_smaller.top()>ds.min_heap_larger.top()){
-            // switch(ds.max_heap_smaller, ds.min_heap_larger);
-            int maxx = ds.max_heap_smaller.top();ds.max_heap_smaller.pop();
-            ds.min_heap_larger.push(maxx);
+        int l = hd.low.size();
+        int h = hd.high.size();
+        if(l==0 || hd.low.top()>num){
+            hd.low.push(num);
+        }else{
+            hd.high.push(num);
         }
 
-        s = ds.max_heap_smaller.size();
-        l = ds.min_heap_larger.size();
 
-
-        if(s>l && s-l>1){
-            // transfer(ds.max_heap_smaller, ds.min_heap_larger);
-            int maxx = ds.max_heap_smaller.top();
-            ds.max_heap_smaller.pop();
-            ds.min_heap_larger.push(maxx);
-
-        } 
-        s = ds.max_heap_smaller.size();
-        l = ds.min_heap_larger.size();
-        if(l>s && l-s>1){
-            // transfer(ds.min_heap_larger, ds.max_heap_smaller);
-            int minn = ds.min_heap_larger.top();
-            ds.min_heap_larger.pop();
-            ds.max_heap_smaller.push(minn);
+        //rebalancing
+        // l = hd.hd.low.size();
+        // h = hd.high.size();
+        if(hd.low.size()>hd.high.size()+1){
+            hd.high.push(hd.low.top());
+            hd.low.pop();
+        }else if(hd.low.size()<hd.high.size()){
+            hd.low.push(hd.high.top());
+            hd.high.pop();
         }
 
     }
     
     double findMedian() {
-        int s = ds.max_heap_smaller.size();
-        int l = ds.min_heap_larger.size();
-        if(s==l){
-            if(s==0) return 0.0;
-            int maxx = ds.max_heap_smaller.top();
-            int minn = ds.min_heap_larger.top();
-            return ((double)maxx + minn)/2;
+        int l = hd.low.size();
+        int h = hd.high.size();
+
+        if(l==h){
+            return (hd.low.top()+hd.high.top())/2.0;
         }else{
-            if(s>l){
-                return ds.max_heap_smaller.top();
-            }else{
-                return ds.min_heap_larger.top();
-            }
+            return hd.low.top();
         }
     }
 };
