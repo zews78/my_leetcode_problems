@@ -1,23 +1,24 @@
-#include <string>
 class Solution {
 public:
-    bool checkMatching(char top, char x){
-        if((x=='(' && top==')') || (x=='{' && top=='}') || (x=='[' && top==']')){
+    bool checkMatch(char top, char curr){
+        if((top=='(' && curr==')') || (top=='{' && curr=='}') || (top=='[' && curr==']')){
             return true;
         }
         return false;
     }
     bool isValid(string s) {
+        int n = s.size();
         stack<char> st;
-        for(auto x: s){
-            if(x == '(' || x=='[' || x=='{'){
-                st.push(x);
+
+        for(int i=0; i<n; i++){
+            char curr = s[i];
+            if(curr=='(' || curr== '{' || curr=='['){
+                st.push(curr);
             }else{
                 if(!st.empty()){
                     char top = st.top();
                     st.pop();
-                    // cout<<x<<" "<<top<<endl;
-                    if(!checkMatching(x, top)){
+                    if(!checkMatch(top, curr)){
                         return false;
                     }
                 }else{
@@ -25,6 +26,7 @@ public:
                 }
             }
         }
+
         if(st.empty()){
             return true;
         }
