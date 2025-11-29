@@ -4,53 +4,30 @@ public:
     MyQueue() {
         
     }
-
-    void popFromBottom(stack<int> &st, int &x){
-        if(st.size()==1){
-            x =st.top();
-            st.pop();
-            return;
-        }
-
-        int top = st.top();
-        st.pop();
-        popFromBottom(st, x);
-        st.push(top);
-    }
-
-    void peakEle(stack<int> &st, int &x){
-        if(st.size()==1){
-            x = st.top();
-            return;
-        }
-
-        int top = st.top();
-        st.pop();
-        peakEle(st, x);
-        st.push(top);
-    }
     
     void push(int x) {
-        st.push(x);
-        
+        if(st.empty()){
+            st.push(x);
+            return;
+        }
+        int temp = st.top();
+        st.pop();
+        push(x);
+        st.push(temp);
     }
     
     int pop() {
-        int x;
-        popFromBottom(st, x);
-        return x;
-        
+        int temp = st.top();
+        st.pop();
+        return temp;
     }
     
     int peek() {
-        int x;
-        peakEle(st,x);
-        return x;
+        return st.top();
     }
     
     bool empty() {
         return st.empty();
-        
     }
 };
 
