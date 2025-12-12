@@ -1,23 +1,24 @@
 class StockSpanner {
 public:
-    vector<int> stock;
+    stack<pair<int, int>> st;
     StockSpanner() {
         
     }
     
     int next(int price) {
-        int ans = 1;
-        int n = stock.size();
-        while(n){
-            if(stock[n-1]<=price){
-                ans++;
-            }else{
-                break;
+        int count_cns =1;
+        if(st.empty()){
+            st.push({price, 1});
+        }else{
+            while(!st.empty() && st.top().first<=price){
+                auto top = st.top();
+                st.pop();
+                count_cns+=top.second;
             }
-            n--;
+            st.push({price, count_cns});
         }
-        stock.push_back(price);
-        return ans;
+        
+        return st.top().second;
     }
 };
 
