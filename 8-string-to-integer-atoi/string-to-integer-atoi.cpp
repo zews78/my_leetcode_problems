@@ -1,30 +1,32 @@
 class Solution {
 public:
     int myAtoi(string s) {
-        int output=0;
-        int n =s.size();
+        int n = s.size();
         int i=0;
-        while(i<n && s[i]==' '){
+        while(s[i]==' '){
             i++;
         }
-        bool isNeg = false;
+
+        bool isNegative = false;
         if(i<n && (s[i]=='-' || s[i]=='+')){
             if(s[i]=='-'){
-                isNeg = true;
+                isNegative = true;
             }
             i++;
         }
 
-        while(i<s.size() && (s[i]-'0')>=0 && (s[i]-'0')<=9){
-            cout<<output<<" ";
-            int digit = s[i] - '0';
-            if (output > (INT_MAX - digit) / 10) {
-                return isNeg ? INT_MIN : INT_MAX;
+        int res =0;
+        while(i<n && s[i]>='0' && s[i]<='9'){
+            int digit = s[i]-'0';
+            if((INT_MAX - digit)/10 <res){
+                return (isNegative)? INT_MIN: INT_MAX;
             }
-            output = 10*output + digit;
+            res = res*10 + digit;
             i++;
         }
 
-        return (isNeg)? -output: output;
+        return (isNegative)?-res: res;
+
+
     }
 };
