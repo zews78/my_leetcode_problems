@@ -16,7 +16,7 @@ public:
 
             int word_len = j-curr;
             reverse_word(s, curr, j-1);
-            cout<<i<<curr<<j<<endl;
+            // cout<<i<<curr<<j<<endl;
             while(word_len){
                 s[i]=s[curr];
                 if(i!=curr) s[curr]=' ';
