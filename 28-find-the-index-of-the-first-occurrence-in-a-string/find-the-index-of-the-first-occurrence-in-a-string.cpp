@@ -8,6 +8,8 @@ public:
 
         //construct lps(longest prefix suffix) for needle
         // the significance of lps is it tracks the repeated chars!
+        //check video:
+        // https://www.youtube.com/watch?v=JoF0Z7nVSrA
         int prev=0;
         int i=1;
         vector<int> lps(n, 0);
@@ -38,7 +40,7 @@ public:
                 if(j>0){
                     j = lps[j-1];
                 }else{
-                    j=0;
+                    // j=0;
                     i++;
                 }
             }
