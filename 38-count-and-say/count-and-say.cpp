@@ -1,32 +1,32 @@
 class Solution {
 public:
-    string solve(int n, string &output){
-        if(n==1){
-            return output;
+    string solve(int i, int n, string &temp){
+        if(i==n-1){
+            return temp;
         }
-        int count =1;
-        string temp ="";
-        int i=0;
-        // for(auto x: output){
-        //     cout<<x;
-        // }cout<<" ";
-        for(; i<output.size()-1; i++){
-            if(output[i]==output[i+1]){
-                count++;
+
+        //cal temp
+        string curr_temp = "";
+        int freq_count=1;
+        for(int k=0; k<temp.size(); k++){
+            if(k<temp.size()-1 && temp[k]==temp[k+1]){
+                freq_count+=1;
             }else{
-                temp+=to_string(count);
-                temp+=output[i];
-                count =1;
+                curr_temp+=freq_count+'0';
+                curr_temp+=temp[k];
+                
+                freq_count=1;
             }
         }
-        temp+=to_string(count);
-        temp+=output[i];
-        // cout<<temp<<" ";
-        return solve(n-1, temp);
+        // cout<<curr_temp<<endl;
+        
+
+        return solve(i+1, n, curr_temp);
+
     }
     string countAndSay(int n) {
-        string output ="1";
-        return solve(n, output);
-
+        string temp = "1";
+        return solve(0, n, temp);
+        return temp;
     }
 };
