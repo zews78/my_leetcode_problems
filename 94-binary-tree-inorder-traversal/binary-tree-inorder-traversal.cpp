@@ -20,16 +20,16 @@ public:
         while(curr || !st.empty()){
             //
             // TreeNode* top = st.top();
-            while(curr){
+            if(curr){
                 st.push(curr);
                 curr = curr->left;
+            }else{
+                curr = st.top();
+                st.pop();
+                res.push_back(curr->val);
+
+                curr = curr->right;
             }
-
-            curr = st.top();
-            st.pop();
-            res.push_back(curr->val);
-
-            curr = curr->right;
         }
         return res;
     }
