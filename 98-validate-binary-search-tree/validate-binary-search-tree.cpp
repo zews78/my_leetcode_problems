@@ -12,21 +12,20 @@
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
-        long long left = LLONG_MIN, right= LLONG_MAX;
-        if(root==NULL){
-            return true;
-        }
-        return checkValid(root, left, right);
+        long long int left = LLONG_MIN;
+        long long int right = LLONG_MAX;
+        return solve(left, right, root);
     }
+    bool solve(long long int left, long long int right, TreeNode* root){
+        if(!root) return true;
 
-    bool checkValid(TreeNode* root, long long left, long long right){
-        if(!root){
-            return true;
+        if(root->val < left || root->val > right){
+            return false;
         }
 
-        
-        long long rootVal = root->val;
-        // cout<<rootVal<<","<<left<<","<<right<<endl;
-        return (rootVal > left) && (rootVal < right) && checkValid(root->left, left, rootVal) && checkValid(root->right, rootVal, right);
+        long long int val = root->val;
+
+
+        return (val > left) && (val <right) && solve(left, val, root->left) && solve(val, right, root->right);
     }
 };
