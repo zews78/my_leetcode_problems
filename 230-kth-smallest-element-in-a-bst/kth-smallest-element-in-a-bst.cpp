@@ -12,23 +12,24 @@
 class Solution {
 public:
     int kthSmallest(TreeNode* root, int k) {
-        int smallest= INT_MAX;
-        int cnt = k;
-        solve(root, cnt, smallest);
-        return smallest;
-    }
-    void solve(TreeNode* root, int &cnt, int &smallest){
-        if(!root) return;
-        // if(k==0) return;
+        stack<TreeNode*> st;
+        int ans = root->val;
 
-        solve(root->left, cnt, smallest);
-        
-        cnt = cnt-1;
-        if(cnt==0){
-            smallest = root->val;
-            return;
+        st.push(root);
+        TreeNode* curr = root;
+        while(curr || !st.empty()){
+
+            if(curr){
+                st.push(curr);
+                curr = curr->left;
+            }else{
+                curr = st.top();
+                st.pop();
+                k--;
+                if(k==0) return curr->val;
+                curr= curr->right;
+            }
         }
-        solve(root->right, cnt, smallest);
-
+        return ans;
     }
 };
