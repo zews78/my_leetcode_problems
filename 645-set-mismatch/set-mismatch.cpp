@@ -6,7 +6,7 @@ public:
         int i=0;
         while(i<n){
             int curr = nums[i];
-            if(curr!=nums[curr-1]){
+            if(curr!=nums[curr-1] && curr-1!=i){
                 swap(nums[i], nums[curr-1]);
             }else{
                 i++;
