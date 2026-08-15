@@ -1,32 +1,27 @@
 class Solution {
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        int n = candidates.size();
-        sort(candidates.begin(), candidates.end());
-        vector<int> subset;
-        vector<vector<int>> all_subsets;
-        solve(0, n, candidates, subset, all_subsets, target);
-        return all_subsets;
+        int N=candidates.size();
+        vector<int> arr;
+        vector<vector<int>> ans;
+
+        solve(N, arr, ans, candidates, target);
+        return ans;
     }
 
-    void solve(int i, int n, vector<int> &nums, vector<int> subset, vector<vector<int>> &all_subsets, int target){
-        if(target<=0){
-            if(target==0) all_subsets.push_back(subset);
+    void solve(int N, vector<int> &arr, vector<vector<int>> &ans, vector<int>& candidates, int target){
+        if(N==0){
+            if(target == 0){
+                ans.push_back(arr);
+            }
             return;
         }
 
-        for(int ind=i; ind<n; ind++){
-            //dup
-            // if(ind>i && nums[ind]==nums[ind-1]){
-            //     continue;
-            // }
-
-            subset.push_back(nums[ind]);
-            target -= nums[ind];
-            solve(ind, n, nums, subset, all_subsets, target);
-            subset.pop_back();
-            target+= nums[ind];
-            // solve(ind+1, n, nums, subset, all_subsets, target);
+        if(candidates[N-1]<=target){
+            arr.push_back(candidates[N-1]);
+            solve(N, arr, ans, candidates, target-candidates[N-1]);
+            arr.pop_back();
         }
+        solve(N-1, arr, ans, candidates, target);
     }
 };
