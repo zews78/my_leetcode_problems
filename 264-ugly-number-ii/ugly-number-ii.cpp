@@ -1,29 +1,34 @@
 class Solution {
 public:
     int nthUglyNumber(int n) {
+        unordered_map<long, int> um;
+        vector<long> ugly;
 
-        vector<int> ugly;
-        ugly.push_back(1);
-        int i2=0;
-        int i3=0;
-        int i5=0;
+        //min heap;
+        priority_queue<long, vector<long>, greater<long>> pq;
 
+        pq.push(1);
+        um[0]++;
 
-        for(int i=1; i<n; i++){
-            int next2= ugly[i2]*2;
-            int next3= ugly[i3]*3;
-            int next5= ugly[i5]*5;
+        // int i=0;
+        while(!pq.empty() && ugly.size()<n){
+            long top = pq.top();
+            pq.pop();
 
-            int nextUgly = min({next2, next3, next5});
-            ugly.push_back(nextUgly);
+            //check visited and push
+            if(!um.count(top)){
+                pq.push(top*2);
+                pq.push(top*3);
+                pq.push(top*5);
 
-            if(next2==nextUgly) i2++;
-            if(next3==nextUgly) i3++;
-            if(next5==nextUgly) i5++;
+                ugly.push_back(top);
+                um[top]++;
+            }
+            
         }
 
         return ugly[n-1];
-
+        // return 0;
 
     }
 };
