@@ -12,7 +12,8 @@ public:
         for(int i=0; i<n; i++){
             int x=points[i][0];
             int y=points[i][1];
-            int dist=((y*y)+(x*x));
+            // int dist=((y*y)+(x*x));
+            long long dist = 1LL * x * x + 1LL * y * y;
 
             pq.push({dist, x, y});
             while(pq.size()>k){
