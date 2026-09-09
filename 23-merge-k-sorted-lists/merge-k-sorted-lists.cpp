@@ -11,41 +11,44 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        priority_queue<pair<int, ListNode*>,vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> pq;
+        int n=lists.size();
 
-        int n = lists.size();
-        if(n ==0) return nullptr;
+        //min heap
+        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> pq;
 
-        for(int i=0; i<lists.size(); i++){
-            ListNode* currHead = lists[i];
-            if(currHead){
-                pq.push({currHead->val, currHead});
+        for(int i=0; i<n; i++){
+            if(lists[i]){
+                pq.push({lists[i]->val, lists[i]});
             }
         }
-        // cout<<pq.size();
 
-        if(pq.size()==0) return nullptr;
-
-        ListNode* first_head = pq.top().second;
-        pq.pop();
-        if(first_head->next){
-            pq.push({first_head->next->val, first_head->next});
-        }
-        ListNode* first_head_copy = first_head;
-
-        while(!pq.empty()){
-            ListNode* front = pq.top().second;
+        pair<int, ListNode*> top;
+        if(!pq.empty()){
+            top = pq.top();
             pq.pop();
 
-            ListNode* front_next = front->next;
-            if(front_next){
-                pq.push({front_next->val, front_next});
+            if(top.second->next){
+                pq.push({top.second->next->val, top.second->next});
             }
-            first_head->next = front;
-            first_head = front;
         }
-        return first_head_copy;
 
-        // return nullptr;
+        ListNode* firstHead = top.second;
+
+        ListNode* dummyNode = firstHead;
+
+        while(!pq.empty()){
+            auto topp = pq.top();
+            pq.pop();
+
+            if(topp.second->next){
+                pq.push({topp.second->next->val, topp.second->next});
+            }
+
+            firstHead->next = topp.second;
+            firstHead = firstHead->next;
+        }
+
+        return dummyNode;
+
     }
 };
