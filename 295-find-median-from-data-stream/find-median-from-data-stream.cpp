@@ -1,7 +1,7 @@
 class HeapData{
 public:
-    priority_queue<int> low;
-    priority_queue<int, vector<int>, greater<int>> high;
+    priority_queue<int> low; //max heap
+    priority_queue<int, vector<int>, greater<int>> high; //min heap
 };
 
 
@@ -14,25 +14,35 @@ public:
     }
     
     void addNum(int num) {
+        //store based on order
         int l = hd.low.size();
         int h = hd.high.size();
-        if(l==0 || hd.low.top()>num){
-            hd.low.push(num);
-        }else{
-            hd.high.push(num);
-        }
+        // if(l==0 || hd.low.top()>num){
+        //     hd.low.push(num);
+        // }else{
+        //     hd.high.push(num);
+        // }
+        hd.low.push(num);
+        hd.high.push(hd.low.top());
+        hd.low.pop();
 
-
-        //rebalancing
-        // l = hd.hd.low.size();
-        // h = hd.high.size();
-        if(hd.low.size()>hd.high.size()+1){
-            hd.high.push(hd.low.top());
-            hd.low.pop();
-        }else if(hd.low.size()<hd.high.size()){
+        if(hd.low.size()<hd.high.size()){
             hd.low.push(hd.high.top());
             hd.high.pop();
         }
+
+        //rebalancing based on size
+        // l = hd.hd.low.size();
+        // h = hd.high.size();
+        // if(hd.low.size()>hd.high.size()+1){
+        //     hd.high.push(hd.low.top());
+        //     hd.low.pop();
+        // }else if(hd.low.size()<hd.high.size()){
+        //     hd.low.push(hd.high.top());
+        //     hd.high.pop();
+        // }
+
+        //you can also check cleaner code
 
     }
     
